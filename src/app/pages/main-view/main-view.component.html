@@ -1,49 +1,34 @@
 <div class="root" >
-    <div class="board" cdkDropListGroup>
-        <div class="board-bar">
-            <div class="board-column-components"
-                cdkDropList
-                [cdkDropListData]="components"
-                #componentsList="cdkDropList"
-                [cdkDropListEnterPredicate]="noReturnPredicate"
-                (cdkDropListDropped)="drop($event)">
-                <div class="tasks-container">
-                    <p class="board-name">FlowCatalyst</p>
-                    
-                    <ul class="menu">
-                        <li class="menu-item"><a class="color-1" href="#">New</a></li>
-                        <li class="menu-item"><a href="#">Open</a></li>
-                        <li class="menu-item"><a href="#">Save</a></li>
-                        <li class="menu-item"><a href="#">Preview</a></li>
-                    </ul>
-
-                    <div class="task" *ngFor="let item of components" cdkDrag>
-                        {{item.title}}
-                    </div>
-                </div>
+    <div class="navbar has-background-dark">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <h1 class="app-name has-gradient-text">Kanban</h1>
             </div>
         </div>
+    </div>
+    <div class="board">
+        <div class="board-bar">
+            <p class="board-name">Board Name</p>
+        </div>
         <div class="board-wrapper" >
-            <div class="board-columns">
-                <div class="board-column-hierarchy"
+            <div class="board-columns" cdkDropListGroup>
+                <div class="board-column-template"
                     cdkDropList
                     #todoList="cdkDropList"
                     [cdkDropListData]="todo"
                     (cdkDropListDropped)="drop($event)"
                     >
-                    <div class="column-title hierarchy-title">
-                            Hierarchy
+                    <div class="column-title">
+                            {{template}}
                     </div>
-                    <div class="hierarchy-container">
-                        <ul>
-                            <li><span class="caret">Radiobutton</span>
-                                <ul class="nested">
-                                    <li>Sub item</li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <!-- &#x25b6; Item 1 -->
+                    <div class="tasks-container"
+                        
+                    >
+                        <div class="task" *ngFor="let item of todo" cdkDrag>
+                            {{item}}
+                        </div>
                     </div>
+                    
                 </div>
                 <div class="board-column-main"
                     cdkDropList
@@ -55,7 +40,7 @@
                     </div>
                     <div class="items-container">
                             <div class="tasks-container">
-                                    <div class="task" *ngFor="let item of board" (click)="loadData(item.id)" cdkDrag>
+                                    <div class="task" *ngFor="let item of board" cdkDrag>
                                         <div class="item-left">(0)</div>
                                         <div *ngIf="!item.editing; else editingItem" class="item-label"
                                         (dblclick)="editItem(item)" >
@@ -73,20 +58,23 @@
                     </div>
                     
                 </div>
-                <div class="board-column-properties"
-                cdkDropList
-                [cdkDropListData]="components"
-                #componentsList="cdkDropList"
-                [cdkDropListEnterPredicate]="noReturnPredicate"
-                (cdkDropListDropped)="drop($event)">
-                <div class="column-title property-title">
-                        Properties
+                <div class="board-column-components"
+                    cdkDropList
+                    [cdkDropListData]="components"
+                    #componentsList="cdkDropList"
+                    [cdkDropListEnterPredicate]="noReturnPredicate"
+                    (cdkDropListDropped)="drop($event)">
+                    <div class="column-title">
+                            {{componentsTitle}}
+                    </div>
+                    <div class="tasks-container"
+                        
+                    >
+                        <div class="task" *ngFor="let item of components" cdkDrag>
+                            {{item.title}}
+                        </div>
+                    </div>
                 </div>
-                <div class="property-container">
-                    <h4 class="property-selected-title">Text Field</h4>
-                   
-                </div>
-            </div>
             </div>
         </div>
     </div>
