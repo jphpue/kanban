@@ -1,102 +1,100 @@
 import { Component, OnInit } from '@angular/core';
-import {CdkDragDrop, moveItemInArray, transferArrayItem, copyArrayItem, CdkDrag} from '@angular/cdk/drag-drop';
-import {ItemComponent} from '../../interfaces/item-component';
-import {ElementDatabaseService} from '../../services/element-database.service'
-import {cloneDeep} from 'lodash';
+import { DatePipe } from '@angular/common';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, copyArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
+import { ItemComponent } from '../../interfaces/item-component';
+import { FormComponent } from '../../interfaces/form-component';
+import { ElementDatabaseService } from '../../services/element-database.service'
+import { FormDatabaseService } from '../../services/form-database.service'
+import { CookieService } from '../../services/cookie.service'
+import { FormBoardComponent } from '../../modules/form-board/form-board.component';
+import { PropertiesWindowComponent } from '../../modules/properties-window/properties-window.component';
+import { DataService } from '../../services/data-service.service';
+import { HierarchyComponent } from '../../modules/hierarchy/hierarchy.component';
+import { ToolBarComponent } from '../../modules/tool-bar/tool-bar.component';
+import { cloneDeep } from 'lodash';
+
 
 @Component({
   selector: 'app-main-view',
   templateUrl: './main-view.component.html',
-  styleUrls: ['./main-view.component.scss']
+  styleUrls: [
+    './main-view.component.scss'
+  ],
+  providers: [DatePipe]
 })
 export class MainViewComponent implements OnInit {
-  components: object[];
-  component : object;
+  private setting = {
+    element: {
+      dynamicDownload: null as HTMLElement
+    }
+  }
+
+  /*components: object[];
+  isComponentsLoaded: boolean = false;
+  component: object;
+  componentTitle: string = '';
+  properties: object[];
+  activeProperty: string;
+  hierarchyItems: [];
   todo: string[];
-  template ="Template";
+  template = "Template";
   boardMain = "Board";
   componentsTitle = "Components";
   itemPrompt: string;
   idForBoard: number;
-  i:number;
-  idList=[];
+  i: number;
+  id: number;
+  idList = [];
 
-  
+  workspaceTitle = "FlowCatalyst"
+  formTitle: string;
+  formId: any;
+  formData: object[];
+  lockerVisible: boolean = true;
+  lastSavedVisible: boolean = false;
+  lastSaved: string;
+  selectFormTitles = [];
+  openFormDropdown: string;
+  exportFormat: string;
+  autoSaveInterval: number = 30000;
+  autoSaveIntervalDraft: number = 30;
+  autoSave: string = 'true';
+  //componentsVisible: boolean = false;
 
-  constructor(private elementDataBase: ElementDatabaseService) { }
+  isNewModalActive: boolean = false;
+  isOpenModalActive: boolean = false;
+  isExportModalActive: boolean = false;
+  isSettingsModalActive: boolean = false;
+  isDeleteFormModalActive: boolean = false;
+  isPropertiesModalActive: boolean = false;
+
+*/
+
+
+  constructor(
+    private elementDataBase: ElementDatabaseService,
+    private formDataBase: FormDatabaseService,
+    public Cookies: CookieService,
+    private datePipe: DatePipe
+  ) { }
 
   ngOnInit() {
     
-    this.getElements();
+    //this.selectFormTitles = [];
+   
 
-  }
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } 
-    else {
-            console.log(" board: ",this.board);
-            const clone = cloneDeep(event.previousContainer.data[event.previousIndex]);
-            clone['id']=Math.floor(Math.random() * Math.floor(20000));;
-            this.checkId(clone);
-                  
-            
-
-    // Add the clone to the new array.
-           event.container.data.splice(event.currentIndex, 0, clone);
+    /*if (!!this.autoSave == true) {
+      setInterval(
+        () => {
+          console.log(this.autoSaveInterval);
+          this.saveForm();
+        }, this.autoSaveInterval)
+    }*/
       
-    }
-  
-  }
-  noReturnPredicate() {
-    return false;
+
   }
 
   
-  board = [
-    
-  ]; 
 
-  
-
-
-  editItem(item:ItemComponent): void{
-    
-    item.editing=true;
-    
-   
-  }
-
-  deleteItem(id:number){
-    console.log("deleting id: "+id);
-    this.board = this.board.filter(board=>board.id!==id);
-    delete this.idList[this.board[id]];
-   
-  }
-
-  getElements(): void {
-    this.components=this.elementDataBase.getElements();
-    //console.log(this.components +" components");
-  }
-
- 
-
-  checkId(clone:any): void{
-    if(this.idList.includes(clone['id'])){
-      clone['id']= Math.floor(Math.random()*Math.floor(2000));
-     
-     
-    }
-    if(this.idList.includes(clone['id']))
-    this.checkId(clone);
-    
-    this.idList.push(clone['id']);
-    
-    
-  }
-
-  loadData(id:number, item: CdkDragDrop<string[]>) {
-    console.log(this.board.filter(board=>board.id==id));
-  }
 }

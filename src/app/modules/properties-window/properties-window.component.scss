@@ -1,0 +1,65 @@
+.property-input {
+    width: 90px !important;
+    float: right !important;
+}
+
+.property-group {
+    display: inline-block;
+    margin-bottom: 3px !important;
+}
+
+.btn-properties {
+    width: 90%;
+    bottom: 56px;
+    position: absolute;
+}
+.board-column-properties{
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 250px;
+    max-width: 250px;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 0px;
+    background: #333333;
+    color: white;
+    height: 100%;
+    right: 0;
+    &:not(:first-child){
+        margin-left: 0;
+    }
+    .property-container{
+        flex-grow: 1;
+        background: #464646;
+        padding: 10px;
+        margin-top: -18px;
+        overflow-y: scroll;
+        margin-bottom: 104px;
+    }
+    .property-title {
+        padding: 10px;
+        font-size: 20px;
+        font-weight: 700;
+        font-family: "Lato", sans-serif;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+    .property-selected-title {
+        font-size: 23px;
+        font-weight: 700;
+    }
+}
+.button.is-color-1 {
+    background: #FF5400 !important;
+    border-color: transparent;
+    color: #fff;
+    &:hover {
+        background: #da4800 !important;
+    }
+    &:active {
+        background: #a03500 !important;
+    }
+}

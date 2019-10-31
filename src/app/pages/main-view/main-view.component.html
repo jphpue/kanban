@@ -1,95 +1,110 @@
 <div class="root" >
-    <div class="board" cdkDropListGroup>
-        <div class="board-bar">
-            <div class="board-column-components"
-                cdkDropList
-                [cdkDropListData]="components"
-                #componentsList="cdkDropList"
-                [cdkDropListEnterPredicate]="noReturnPredicate"
-                (cdkDropListDropped)="drop($event)">
-                <div class="tasks-container">
-                    <p class="board-name">FlowCatalyst</p>
-                    
-                    <ul class="menu">
-                        <li class="menu-item"><a class="color-1" href="#">New</a></li>
-                        <li class="menu-item"><a href="#">Open</a></li>
-                        <li class="menu-item"><a href="#">Save</a></li>
-                        <li class="menu-item"><a href="#">Export</a></li>
-                        <li class="menu-item"><a href="#">Preview</a></li>
-                    </ul>
-
-                    <div class="task" *ngFor="let item of components" cdkDrag>
-                        {{item.title}}
-                    </div>
-                    <p class="last-saved">Saved. (Today 15:31)</p>
-                </div>
-            </div>
-        </div>
-        <div class="board-wrapper" >
-            <div class="board-columns">
-                <div class="board-column-hierarchy"
-                    cdkDropList
-                    #todoList="cdkDropList"
-                    [cdkDropListData]="todo"
-                    (cdkDropListDropped)="drop($event)"
-                    >
-                    <div class="column-title hierarchy-title">
-                            Hierarchy
-                    </div>
-                    <div class="hierarchy-container">
-                        <ul>
-                            <li><span class="caret">Radiobutton</span>
-                                <ul class="nested">
-                                    <li>Sub item</li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <!-- &#x25b6; Item 1 -->
-                    </div>
-                </div>
-                <div class="board-column-main"
-                    cdkDropList
-                    [cdkDropListData]="board"
-                    #doneList="cdkDropList"
-                    (cdkDropListDropped)="drop($event)">
-                    <div class="column-title">
-                            {{boardMain}}
-                    </div>
-                    <div class="items-container">
-                            <div class="tasks-container">
-                                    <div class="task" *ngFor="let item of board" (click)="loadData(item.id)" cdkDrag>
-                                        <div class="item-left">(0)</div>
-                                        <div *ngIf="!item.editing; else editingItem" class="item-label"
-                                        (dblclick)="editItem(item)" >
-                                                <div *ngIf="!item.prompt; else showTitle">{{item.title}}</div>
-                                                <ng-template #showTitle>{{item.prompt}}</ng-template>
-                                        </div>
-                                        <ng-template #editingItem>
-                                            
-                                                    <input type="text" name="item" class="item-edit" [(ngModel)]="itemPrompt" placeholder="{{item.title}} (keyup.enter)="addItem()">
-                                            
-                                        </ng-template>
-                                        <div class="item-right" (click)="deleteItem(item.id)">(X)</div>
-                                    </div>
-                                </div>
-                    </div>
-                    
-                </div>
-                <div class="board-column-properties"
-                cdkDropList
-                [cdkDropListData]="components"
-                #componentsList="cdkDropList"
-                [cdkDropListEnterPredicate]="noReturnPredicate"
-                (cdkDropListDropped)="drop($event)">
-                <div class="column-title property-title">
-                        Properties
-                </div>
-                <div class="property-container">
-                    <h4 class="property-selected-title">Text Field</h4>
-                   
-                </div>
-            </div>
-            </div>
-        </div>
+<div class="board" cdkDropListGroup>
+    <app-tool-bar></app-tool-bar>
+      <!--<div class="locker" *ngIf="lockerVisible">
+          Start by either creating a new form or opening an older one.<br>
+          <button class="button is-color-1" (click)="toggleNewFormModal()">New Form</button>&nbsp;
+          <button class="button is-info" (click)="toggleOpenFormModal()">Open Form</button>
+      </div>-->
+      
+          
+      
+      <app-hierarchy></app-hierarchy>
+      <app-properties-window></app-properties-window>
+      <app-form-board></app-form-board>       
+        
+         
+      <div class="board-wrapper" >
+         
+          <div class="board-columns">
+          </div>
+      </div>
+  </div>
+</div>
+<div class="modal" [ngClass]="{ 'is-active' : isNewModalActive }">
+<div class="modal-background" (click)="toggleNewFormModal()"></div>
+<div class="modal-card">
+  <header class="modal-card-head">
+    <p class="modal-card-title">New Form</p>
+    <button class="delete" aria-label="close" (click)="toggleNewFormModal()"></button>
+  </header>
+  <section class="modal-card-body">
+    <div class="form-group">
+      <label for="formTitle">Form Title/Customer</label>
+      <div class="input-group">
+        <input id="formTitle" class="form-control" placeholder="Title/Customer" name="formTitle" [(ngModel)]="formTitle">
+      </div>
     </div>
+  </section>
+  <footer class="modal-card-foot">
+    <button class="button is-color-1" (click)="createForm()">Create Form</button>
+    <button class="button" (click)="toggleNewFormModal()">Cancel</button>
+  </footer>
+</div>
+</div>
+
+
+
+<div class="modal" [ngClass]="{ 'is-active' : isExportModalActive }">
+<div class="modal-background" (click)="toggleExportFormModal()"></div>
+<div class="modal-card">
+  <header class="modal-card-head">
+    <p class="modal-card-title">Export Form</p>
+    <button class="delete" aria-label="close" (click)="toggleExportFormModal()"></button>
+  </header>
+  <section class="modal-card-body">
+    Export format
+    <select class="form-control" [(ngModel)]="exportFormat">
+      <option value="json">JSON File</option>
+      <option value="xml">XML Document</option>
+    </select>
+  </section>
+  <footer class="modal-card-foot">
+    <button class="button is-color-1" (click)="exportForm()">Export Form</button>
+    <button class="button" (click)="toggleExportFormModal()">Cancel</button>
+  </footer>
+</div>
+</div>
+
+<div class="modal" [ngClass]="{ 'is-active' : isSettingsModalActive }">
+<div class="modal-background" (click)="toggleSettingsModal()"></div>
+<div class="modal-card">
+  <header class="modal-card-head">
+    <p class="modal-card-title">Settings</p>
+    <button class="delete" aria-label="close" (click)="toggleSettingsModal()"></button>
+  </header>
+  <section class="modal-card-body">
+     <div class="form-group">
+      <label for="autoSave">Autosave Settings</label>
+      <div class="input-group">
+        Autosave: <input id="autoSave" type="checkbox" class="form-control checkbox-form" name="autoSave" [(ngModel)]="autoSave">
+      </div>
+      <div class="input-group">
+        <input id="autoSaveIntervalDraft" type="number" class="form-control" placeholder="How often should it save? (seconds)" name="autoSaveIntervalDraft" [(ngModel)]="autoSaveIntervalDraft" value="30">
+      </div>
+    </div>
+  </section>
+  <footer class="modal-card-foot">
+    <button class="button is-color-1" (click)="saveSettings()">Save Settings</button>
+    <button class="button" (click)="toggleSettingsModal()">Cancel</button>
+  </footer>
+</div>
+</div>
+
+
+<div class="modal" [ngClass]="{ 'is-active' : isDeleteFormModalActive }">
+<div class="modal-background" (click)="toggleDeleteFormModal()"></div>
+<div class="modal-card">
+  <header class="modal-card-head">
+    <p class="modal-card-title">Delete Form <span class="modal-span">"{{workspaceTitle}}"</span></p>
+    <button class="delete" aria-label="close" (click)="toggleDeleteFormModal()"></button>
+  </header>
+  <section class="modal-card-body">
+    Are you sure you wish to delete <b><i>{{workspaceTitle}}</i></b>? You won't be able to access it again.
+  </section>
+  <footer class="modal-card-foot">
+    <button class="button is-danger" (click)="deleteActiveForm()">Delete Form</button>
+    <button class="button" (click)="toggleDeleteFormModal()">Cancel</button>
+  </footer>
+</div>
 </div>

@@ -1,0 +1,20 @@
+
+<div class="board-column-hierarchy"
+                  cdkDropList
+                  #doneList="cdkDropList"
+                  [cdkDropListData]="dataservice.board"
+                  (cdkDropListDropped)="drop($event)"
+                  >
+                  <div class="column-title hierarchy-title">
+                          Hierarchy
+                  </div>
+                  <div class="hierarchy-container" (cdkDropListDropped)="dropHierarchy($event)">
+                      <span class="property-container-text" *ngIf="!dataservice.componentTitle ? !dataservice.componentTitle : null">
+                          Please add one or more elements onto your board to display hierarchy.{{hierarchyItems}}
+                      </span>
+                      <ul *ngFor="let hierarchyItem of dataservice.hierarchyItems" cdkDrag>
+                          <li class="hierarchy-item" [ngClass]="{'color-1': id === hierarchyItem.id }" id="{{hierarchyItem.id}}" (click)="loadProperties(hierarchyItem.id)"><span *ngIf="hierarchyItem.default?.length != 0" class="caret"></span> {{hierarchyItem.title}}</li>
+                      </ul>
+                      <!-- &#x25b6; Item 1 -->
+                  </div>
+              </div>

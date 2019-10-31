@@ -1,0 +1,70 @@
+            .board-column-main{
+                margin-right: 261px !important;
+                margin-left: 215px !important;
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                flex-basis: 0;
+                min-width: 600px;
+                margin: 16px;
+                padding: 25px;
+                border-radius: 0px;
+                overflow-y: scroll;
+                background: #f1f1f1;
+                
+                &:not(:first-child){
+                    margin-left: 0;
+                } 
+            }
+            .board-right-items {
+                a {
+                    font-size: 12px;
+                    font-weight: 400;    
+                    background: grey;
+                    padding: 4px;
+                    border-radius: 5px;
+                    color: white;
+                    &:hover {
+                        background: #464646;
+                    }
+                }
+            }
+            .column-title{
+                font-size: 20px;
+                font-weight: 700;
+                font-family: 'Lato', sans-serif;
+                text-transform: uppercase;
+                margin-bottom: 20px;
+            }
+            .tasks-container{
+                flex-grow: 1;
+               
+            }
+            .task{
+                display: flex;
+                justify-content: center;
+                padding: 15px 12px;
+                background: #b1b1b1;
+                color: white;
+                /* border-bottom: solid 1px #ddd; */
+                cursor: pointer;
+                margin: 2px;
+                border-radius: 4px;
+                box-shadow: 0 5px 5px -3px rgba(black,0.05), 0 3px 14px 2px rgba(black,0.05);
+                
+                .item-left{
+                    display: block;
+                    justify-self: flex-start;
+                    flex-basis: 50%;
+                }
+                .item-right{
+                    display: flex;
+                    justify-self: flex-end;
+                    justify-content: flex-end;
+                    flex-basis: 50%;
+                }
+                .item-edit{
+                    border: black solid 1px;
+                }
+                
+        }

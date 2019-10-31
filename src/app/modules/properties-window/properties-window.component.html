@@ -1,0 +1,35 @@
+<div class="tab-properties board-column-properties">
+    <div class="column-title property-title">
+            Properties
+    </div>
+    
+        <div class="property-container">
+            <span class="property-container-text" *ngIf="!dataservice.componentTitle ? !dataservice.componentTitle : null">
+                Please add a new element or select an existing one to edit its properties.
+            </span>
+            <span class="properties-items">
+                <h4 class="property-selected-title">{{componentTitle}}</h4>
+                <hr *ngIf="componentTitle ? componentTitle : null">
+                <div class="properties" *ngFor="let property of dataservice.properties">
+                    <div class="input-group property-group">
+                        {{property.title}}: 
+                        <input id="{{property.title}}" class="form-control property-input" type="text" placeholder="" value="{{property.value}}">
+                    </div>
+                </div>
+            </span>
+            <button class="button is-color-1 btn-block btn-properties" [attr.disabled]="!dataservice.componentTitle ? !componentTitle : null"   (click)="saveProperties()">Save Properties</button>
+            <!--
+           
+            <ng-template #editingItem>
+                    <input type="text" name="item" class="item-edit" [(ngModel)]="itemPrompt" placeholder="{{item.title}} (keyup.enter)="addItem()">
+                </ng-template>
+                <div *ngIf="!item.editing; else editingItem" class="item-label">
+                        <div *ngIf="!item.prompt; else showTitle">{{property.title}}
+                        </div>
+                        
+                            <ng-template #showTitle>
+                                {{property.prompt}}
+                            </ng-template>
+                    </div> -->
+        </div>
+    </div>
