@@ -56,45 +56,7 @@ export class ToolBarComponent implements OnInit {
     this.dataservice.components.length = 0;
     this.dataservice.isComponentsLoaded = false;
   }
-  closeNewFormModal() {
-    this.dataservice.isNewModalActive = false;
-  }
-
-  toggleDeleteFormModal() {
-    this.dataservice.isDeleteFormModalActive = false;
-  }
-
-  closeOpenFormModal() {
-    this.dataservice.isOpenModalActive = false;
-  }
-
-  closeDeleteFormModal() {
-    this.dataservice.isDeleteFormModalActive = false;
-  }
-
-  toggleNewFormModal() {
-    this.dataservice.isNewModalActive = !this.dataservice.isNewModalActive;
-  }
-
-  toggleOpenFormModal() {
-    this.dataservice.isOpenModalActive = !this.dataservice.isOpenModalActive;
-  }
-
-  toggleExportFormModal() {
-    this.dataservice.isExportModalActive = !this.dataservice.isExportModalActive;
-  }
-
-  toggleSettingsModal() {
-    this.dataservice.isSettingsModalActive = !this.dataservice.isSettingsModalActive;
-  }
-  togglePropertiesModal(){ 
-    this.dataservice.isPropertiesModalActive = !this.dataservice.isPropertiesModalActive;
-    console.log(this.dataservice.isPropertiesModalActive);
-  }
-  closePropertiesModal(){
-    this.dataservice.isPropertiesModalActive= false;
-  }
- 
+  
 
 
 }

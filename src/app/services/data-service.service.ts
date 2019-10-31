@@ -62,6 +62,45 @@ export class DataService {
 
 
   }
+  closeNewFormModal() {
+    this.isNewModalActive = false;
+  }
+
+  toggleDeleteFormModal() {
+    this.isDeleteFormModalActive = false;
+  }
+
+  closeOpenFormModal() {
+    this.isOpenModalActive = false;
+  }
+
+  closeDeleteFormModal() {
+    this.isDeleteFormModalActive = false;
+  }
+
+  toggleNewFormModal() {
+    this.isNewModalActive = !this.isNewModalActive;
+  }
+
+  toggleOpenFormModal() {
+    this.isOpenModalActive = !this.isOpenModalActive;
+  }
+
+  toggleExportFormModal() {
+    this.isExportModalActive = !this.isExportModalActive;
+  }
+
+  toggleSettingsModal() {
+    this.isSettingsModalActive = !this.isSettingsModalActive;
+  }
+  togglePropertiesModal(){ 
+    this.isPropertiesModalActive = !this.isPropertiesModalActive;
+    console.log(this.isPropertiesModalActive);
+  }
+  closePropertiesModal(){
+    this.isPropertiesModalActive= false;
+  }
+ 
 
 
 

@@ -21,12 +21,12 @@
       </div>
   </div>
 </div>
-<div class="modal" [ngClass]="{ 'is-active' : isNewModalActive }">
-<div class="modal-background" (click)="toggleNewFormModal()"></div>
+<div class="modal" [ngClass]="{ 'is-active' : dataservice.isNewModalActive }">
+<div class="modal-background" (click)="dataservice.toggleNewFormModal()"></div>
 <div class="modal-card">
   <header class="modal-card-head">
     <p class="modal-card-title">New Form</p>
-    <button class="delete" aria-label="close" (click)="toggleNewFormModal()"></button>
+    <button class="delete" aria-label="close" (click)="dataservice.toggleNewFormModal()"></button>
   </header>
   <section class="modal-card-body">
     <div class="form-group">
@@ -38,7 +38,7 @@
   </section>
   <footer class="modal-card-foot">
     <button class="button is-color-1" (click)="createForm()">Create Form</button>
-    <button class="button" (click)="toggleNewFormModal()">Cancel</button>
+    <button class="button" (click)="dataservice.toggleNewFormModal()">Cancel</button>
   </footer>
 </div>
 </div>

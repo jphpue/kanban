@@ -16,7 +16,8 @@ import { emit } from 'cluster';
 @Component({
   selector: 'app-form-board',
   templateUrl: './form-board.component.html',
-  styleUrls: ['./form-board.component.scss']
+  styleUrls: ['./form-board.component.scss'],
+  providers: [DatePipe]
 })
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,11 @@ export class FormBoardComponent implements OnInit {
     public Cookies: CookieService,
     private elementDataBase: ElementDatabaseService,
     private props: PropertiesWindowComponent,
+    
     public dataservice: DataService,
-    public hierarchy:HierarchyComponent
+    public hierarchy:HierarchyComponent,
+
+    private formDataBase: FormDatabaseService
     
   ) { }
 
@@ -88,6 +92,149 @@ export class FormBoardComponent implements OnInit {
   editItem(item: ItemComponent): void {
 
     item.editing = true;
+  }
+  closeForm(): void {
+    this.Cookies.deleteCookie("form_id");
+    this.destroyWorkspace();
+  }
+
+  /* delete currently active/open form */
+  deleteActiveForm(): void {
+    this.formId = this.Cookies.getCookie("form_id");
+    this.formDataBase.deleteForm(this.formId).then((data:any) => {
+      if(data)
+      {
+        this.destroyWorkspace();
+        this.Cookies.deleteCookie("form_id");
+        this.closeDeleteFormModal();
+      }
+    });
+  }
+
+  /* loads all forms */
+  loadForms(): void {
+    this.selectFormTitles = [];
+    this.formDataBase.loadForms().then((data:any) => {
+      if(data)
+      {
+        for(this.i=0; this.i<data['data'].length;this.i++){
+          this.selectFormTitles.push(
+            {title: data['data'][this.i]['title'],id: data['data'][this.i]['_id']}
+          )
+        }
+        this.refreshHierarchy();
+      }
+    });
+  }
+
+  /* for saving forms */
+  saveForm(): void {
+    this.dataservice.formId = this.Cookies.getCookie("form_id");
+    this.dataservice.formData = JSON.stringify(this.dataservice.board);
+    if(this.dataservice.formId) {
+      this.formDataBase.saveForm(this.dataservice.formId,this.dataservice.formData).then((data:any) => {
+        if(data)
+        {
+          let newDate = new Date();
+          console.log("Saved. at: " + this.datePipe.transform(newDate, 'HH:mm'));
+          this.dataservice.lastSaved = "Saved. (Today "+ this.datePipe.transform(newDate, 'HH:mm') +")";
+        }
+      });
+    }
+  }
+
+  /* loads form data (board contents) and updates current board contents */
+  loadFormData(formId): void {
+    this.formDataBase.loadFormData(formId).then((data:any) => {
+      if(data)
+      {
+        let re = /\'/gi;
+        this.formData = data['data'][0]['formData'].replace(re, '"');
+        if(this.formData !== 'empty')
+        {
+          this.formData = JSON.parse(this.formData);
+          this.board = this.formData;
+          console.log(this.board);
+          if(this.board.length != 0)
+          { 
+            this.id = this.board[0]['id'];
+            this.loadProperties(this.id);
+          } else {
+            this.closeProperties();
+          }
+        } else {
+          this.closeProperties();
+          this.board = [];
+        }
+        this.refreshHierarchy();
+      }
+    });
+  }
+
+  /* open form */
+  openForm(): void {
+    this.formDataBase.loadForm(this.openFormDropdown).then((data:any) => {
+      if(data)
+      {
+        this.formTitle = data['data']['title'];
+        this.workspaceTitle = data['data']['title'];
+        this.Cookies.setCookie("form_id", this.openFormDropdown, 1, "/");
+        this.loadFormData(this.openFormDropdown);
+        this.initializeWorkspace();
+        this.closeOpenFormModal();
+        this.refreshHierarchy();
+      }
+    });
+  }
+
+  /* for loading/opening forms */
+  loadForm(formId): void {
+    this.formDataBase.loadForm(this.formId).then((data:any) => {
+      if(data)
+      {
+        this.formTitle = data['data']['title'];
+        this.workspaceTitle = data['data']['title'];
+        this.Cookies.setCookie("form_id", this.formId, 1, "/");
+        this.loadFormData(this.formId);
+        this.initializeWorkspace();
+      }
+    });
+  }
+  
+  /* for creating forms */
+  createForm(): void {
+    this.formId = this.formDataBase.newForm(this.formTitle).then((data:any) => {
+    setTimeout(
+      () => {
+      if(this.formId)
+      {
+        this.formId = data['data']['_id'];
+        this.formTitle = data['data']['title'];
+        this.workspaceTitle = data['data']['title'];
+        this.board = [];
+        /* setcookie to remember the form id */
+        this.Cookies.setCookie("form_id", this.formId, 1, "/");
+        this.initializeWorkspace();
+      }
+    });
+    }, 2500)
+  }
+
+  exportForm(): void {
+    if(this.dataservice.exportFormat == 'json')
+    {  
+      this.dyanmicDownloadByHtmlTag({
+        fileName: this.dataservice.workspaceTitle + '.json',
+        text: JSON.stringify(this.dataservice.board)
+      });
+    }
+    if(this.dataservice.exportFormat == 'xml')
+    {  
+      this.dyanmicDownloadByHtmlTag({
+        fileName: this.dataservice.workspaceTitle + '.xml',
+        text: JSON.stringify(this.dataservice.board)
+      });
+    }
   }
 
 
