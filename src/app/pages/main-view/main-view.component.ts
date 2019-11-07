@@ -12,6 +12,7 @@ import { DataService } from '../../services/data-service.service';
 import { HierarchyComponent } from '../../modules/hierarchy/hierarchy.component';
 import { ToolBarComponent } from '../../modules/tool-bar/tool-bar.component';
 import { cloneDeep } from 'lodash';
+import { FormDataServiceService } from 'src/app/services/form-data-service.service';
 
 
 @Component({
@@ -28,69 +29,25 @@ export class MainViewComponent implements OnInit {
       dynamicDownload: null as HTMLElement
     }
   }
-
-  /*components: object[];
-  isComponentsLoaded: boolean = false;
-  component: object;
-  componentTitle: string = '';
-  properties: object[];
-  activeProperty: string;
-  hierarchyItems: [];
-  todo: string[];
-  template = "Template";
-  boardMain = "Board";
-  componentsTitle = "Components";
-  itemPrompt: string;
-  idForBoard: number;
-  i: number;
-  id: number;
-  idList = [];
-
-  workspaceTitle = "FlowCatalyst"
-  formTitle: string;
-  formId: any;
-  formData: object[];
-  lockerVisible: boolean = true;
-  lastSavedVisible: boolean = false;
-  lastSaved: string;
-  selectFormTitles = [];
-  openFormDropdown: string;
-  exportFormat: string;
-  autoSaveInterval: number = 30000;
-  autoSaveIntervalDraft: number = 30;
-  autoSave: string = 'true';
-  //componentsVisible: boolean = false;
-
-  isNewModalActive: boolean = false;
-  isOpenModalActive: boolean = false;
-  isExportModalActive: boolean = false;
-  isSettingsModalActive: boolean = false;
-  isDeleteFormModalActive: boolean = false;
-  isPropertiesModalActive: boolean = false;
-
-*/
-
-
   constructor(
     private elementDataBase: ElementDatabaseService,
     private formDataBase: FormDatabaseService,
     public Cookies: CookieService,
     private datePipe: DatePipe,
     public dataservice: DataService,
-    public formboard: FormBoardComponent
+    public formboard: FormBoardComponent,
+    public formDataService: FormDataServiceService
   ) { }
 
   ngOnInit() {
     
     this.dataservice.selectFormTitles = [];
    
-
-
     if (!!this.dataservice.autoSave == true) {
       setInterval(
         () => {
           console.log(this.dataservice.autoSaveInterval);
-          this.formboard.saveForm();
+          this.formDataService.saveForm();
         }, this.dataservice.autoSaveInterval)
     }
       

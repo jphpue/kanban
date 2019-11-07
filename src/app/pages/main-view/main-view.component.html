@@ -1,11 +1,11 @@
 <div class="root" >
 <div class="board" cdkDropListGroup>
     <app-tool-bar></app-tool-bar>
-      <!--<div class="locker" *ngIf="lockerVisible">
+      <div class="locker" *ngIf="lockerVisible">
           Start by either creating a new form or opening an older one.<br>
           <button class="button is-color-1" (click)="toggleNewFormModal()">New Form</button>&nbsp;
           <button class="button is-info" (click)="toggleOpenFormModal()">Open Form</button>
-      </div>-->
+      </div>
       
           
       
@@ -21,6 +21,47 @@
       </div>
   </div>
 </div>
+<div class="modal" [ngClass]="{ 'is-active' : dataservice.isOpenModalActive }">
+    <div class="modal-background" (click)="dataservice.toggleOpenFormModal()"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Open Form</p>
+        <button class="delete" aria-label="close" (click)="dataservice.toggleOpenFormModal()"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="form-group">
+          <label for="formTitle">Select Form</label>
+          <select class="form-control" name="my-dropdown" [(ngModel)]="dataservice.openFormDropdown">
+              <option selected disabled>Select a form</option>
+              <option *ngFor="let selectFormTitle of dataservice.selectFormTitles" [ngValue]="selectFormTitle.id">{{selectFormTitle.title}}</option>
+          </select>
+        </div>
+        <hr>
+        Open from a file (.XML or .JSON)
+          <div class="file has-name is-fullwidth">
+            <label class="file-label">
+              <input class="file-input" type="file" name="resume">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Choose a file…
+                </span>
+              </span>
+              <span class="file-name">
+                
+              </span>
+            </label>
+          </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-color-1" (click)="openForm()">Open Form</button>
+        <button class="button" (click)="toggleOpenFormModal()">Cancel</button>
+      </footer>
+    </div>
+  </div>
+
 <div class="modal" [ngClass]="{ 'is-active' : dataservice.isNewModalActive }">
 <div class="modal-background" (click)="dataservice.toggleNewFormModal()"></div>
 <div class="modal-card">
@@ -32,12 +73,12 @@
     <div class="form-group">
       <label for="formTitle">Form Title/Customer</label>
       <div class="input-group">
-        <input id="formTitle" class="form-control" placeholder="Title/Customer" name="formTitle" [(ngModel)]="formTitle">
+        <input id="formTitle" class="form-control" placeholder="Title/Customer" name="formTitle" [(ngModel)]="dataservice.formTitle">
       </div>
     </div>
   </section>
   <footer class="modal-card-foot">
-    <button class="button is-color-1" (click)="createForm()">Create Form</button>
+    <button class="button is-color-1" (click)="formboard.createForm()">Create Form</button>
     <button class="button" (click)="dataservice.toggleNewFormModal()">Cancel</button>
   </footer>
 </div>
@@ -108,3 +149,26 @@
   </footer>
 </div>
 </div>
+<div class="modal" [ngClass]="{ 'is-active' : dataservice.isConfigureModalActive }">
+    <div class="modal-background" (click)="dataservice.toggleConfigureModal()"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">{{dataservice.componentTitle}}</p>
+        <button class="delete" aria-label="close" (click)="dataservice.toggleConfigureModal()"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="form-group">
+          <label for="formTitle">Add new elements</label>
+          <div class="input-group">
+            <!--<input id="formTitle" class="form-control" placeholder="Title/Customer" name="formTitle" [(ngModel)]="dataservice.formTitle">-->
+            <button id  ="add-element-button" (click)="formboard.addNewElement(dataservice.component)">+</button>
+          </div>
+          <div properties *ngFor="let item of dataservice.comboboxComponents">{{item["title"]}}</div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-color-1" (click)="formboard.saveProperties()">Save settings</button>
+        <button class="button" (click)="dataservice.toggleConfigureModal()">Cancel</button>
+      </footer>
+    </div>
+    </div>

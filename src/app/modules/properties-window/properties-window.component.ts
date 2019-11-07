@@ -60,10 +60,10 @@ export class PropertiesWindowComponent implements OnInit {
   
     this.dataservice.component = this.dataservice.board.filter(
       board => this.dataservice.board.id === this.id);
-      console.log(this.board[0]);
-      console.log(this.formBoard.board);
-    if(this.component===undefined) return
-    for (let obj of this.boardComponent) {
+     /* console.log(this.board[0]);
+      console.log(this.formBoard.board);*/
+    if(this.dataservice.component===undefined) return
+    for (let obj of this.dataservice.component) {
       
       let key:string;
       for (let key in obj) {
@@ -74,16 +74,17 @@ export class PropertiesWindowComponent implements OnInit {
           && key != 'main') {
           //console.log(key);
           let value = (<HTMLInputElement> document.getElementById(key)).value
-          console.log( this.component[0][key]);
-          this.component[0][key] = value;
-          console.log( this.component[0][key])
+         // console.log( this.dataservice.component[0][key]);
+          this.dataservice.component[0][key] = value;
+          //console.log( this.dataservice.component[0][key])
           
           let pushed={ title: key, value : obj[key] };
-          this.properties.push(pushed)
+          this.dataservice.properties.push(pushed)
           //console.log("saved");
         }
-        this.loadProperties(this.boardComponent[0]["id"])
+    
       }
+      this.loadProperties(this.dataservice.component[0]["id"],null,null)
     }
     //this.refreshHierarchy();
   }
@@ -113,26 +114,26 @@ export class PropertiesWindowComponent implements OnInit {
     console.log(this.dataservice.component);
   }
   refreshProperties() {
-    if (this.board.length != 0) {
-      this.id = this.board[0]['id'];
+    if (this.dataservice.board.length != 0) {
+      this.dataservice.id = this.dataservice.board[0]['id'];
       //this.loadProperties(this.id,null,null);
     } else {
-      this.properties = [];
-      this.componentTitle = null;
+      this.dataservice.properties = [];
+      this.dataservice.componentTitle = null;
     }
   }
 
   closeProperties() {
-    this.properties = [];
-    this.componentTitle = null;
+    this.dataservice.properties = [];
+    this.dataservice.componentTitle = null;
   }
   togglePropertiesModal(){ 
-    this.isPropertiesModalActive = !this.isPropertiesModalActive;
-    console.log(this.isPropertiesModalActive);
+    this.dataservice.isPropertiesModalActive = !this.dataservice.isPropertiesModalActive;
+    console.log(this.dataservice.isPropertiesModalActive);
   }
   closePropertiesModal(){
     //this.isPropertiesModalActive= false;
-    console.log("formComponent properties "+ this.formComponent);
+    //console.log("formComponent properties "+ this.formComponent);
   }
 
 }

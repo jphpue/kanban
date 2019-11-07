@@ -7,12 +7,12 @@
             (cdkDropListDropped)="drop($event)"
             [cdkDropListEnterPredicate]="noReturnPredicate">
             <div class="tasks-container">
-                <p class="board-name">{{workspaceTitle}}</p>
+                <p class="board-name">{{dataservice.workspaceTitle}}</p>
                 
                 <ul class="menu">
                     <li class="menu-item" (click)="dataservice.toggleNewFormModal()"><a class="color-1" href="#">New</a></li>
                     <li class="menu-item" (click)="dataservice.toggleOpenFormModal()"><a href="#">Open</a></li>
-                    <li class="menu-item" (click)="saveForm()" *ngIf="workspaceTitle !== 'FlowCatalyst'"><a href="#">Save</a></li>
+                    <li class="menu-item" (click)="formDataService.saveForm()" *ngIf="workspaceTitle !== 'FlowCatalyst'"><a href="#">Save</a></li>
                     <li class="menu-item" (click)="dataservice.toggleExportFormModal()" *ngIf="workspaceTitle !== 'FlowCatalyst'"><a href="#">Export</a></li>
                     <li class="menu-item has-submenu" *ngIf="workspaceTitle !== 'FlowCatalyst'"> Misc
                         <ul class="sub-menu">
@@ -28,24 +28,24 @@
                 <div class="task" *ngFor="let item of dataservice.components" cdkDrag>
                     {{item.title}}
                 </div>
-                <p class="last-saved" *ngIf="lastSavedVisible">{{lastSaved}}</p>
+                <p class="last-saved" *ngIf="dataservice.lastSavedVisible">{{dataservice.lastSaved}}</p>
             </div>
         </div>
     </div>
 </div>
     <div class="modal" [ngClass]="{ 'is-active' : isOpenModalActive }">
-            <div class="modal-background" (click)="toggleOpenFormModal()"></div>
+            <div class="modal-background" (click)="dataservice.toggleOpenFormModal()"></div>
             <div class="modal-card">
               <header class="modal-card-head">
                 <p class="modal-card-title">Open Form</p>
-                <button class="delete" aria-label="close" (click)="toggleOpenFormModal()"></button>
+                <button class="delete" aria-label="close" (click)="dataservice.toggleOpenFormModal()"></button>
               </header>
               <section class="modal-card-body">
                 <div class="form-group">
                   <label for="formTitle">Select Form</label>
                   <select class="form-control" name="my-dropdown" [(ngModel)]="openFormDropdown">
                       <option selected disabled>Select a form</option>
-                      <option *ngFor="let selectFormTitle of selectFormTitles" [ngValue]="selectFormTitle.id">{{selectFormTitle.title}}</option>
+                      <option *ngFor="let selectFormTitle of selectFormTitles" [ngValue]="selectFormTitle.id">{{dataservice.selectFormTitle.title}}</option>
                   </select>
                 </div>
                 <hr>

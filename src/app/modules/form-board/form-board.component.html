@@ -6,6 +6,7 @@
                   #doneList="cdkDropList"
                   
                   (cdkDropListDropped)="drop($event)">
+                  
     <div class="column-title">
         {{boardMain}}
         <span class="is-pulled-right board-right-items">
@@ -16,9 +17,10 @@
     </div>
     <div class="items-container">
         <div class="tasks-container">
-            <div class="task" [ngClass]="{'color-bg-1': id === item.id }" *ngFor="let item of dataservice.board"  (click)="props.loadProperties(item.id, $event)" id="{{item.id}}" cdkDrag>
+                <p *ngIf="dataservice.board.length == 0" class="board-container-text">You can add new elements to your board by dragging them from the top menu.</p>
+            <div class="task" [ngClass]="{'color-bg-1': dataservice.id === item.id }" *ngFor="let item of dataservice.board"  (click)="props.loadProperties(item.id, $event)" id="{{item.id}}" cdkDrag>
              
-                <div class="item-left">(0)
+                <div class="item-left" (click)="dataservice.toggleConfigureModal()">(0)
             
                 </div>
                 

@@ -5,12 +5,11 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 
-const endpoint = 'http://node.marcosraudkett.com:8083/api/';
+//const endpoint = 'http://node.marcosraudkett.com:8083/api/';
+const endpoint = 'http://172.30.133.2:8083/api/';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
-    
-
   })
 };
 
@@ -34,7 +33,7 @@ export class ElementDatabaseService {
   }
   
   getElementsAPI(): Observable<any> {
-    return this.http.get(endpoint + 'elements').pipe(
+    return this.http.get(endpoint + 'fields').pipe(
       map(this.extractData));
   }
   
@@ -46,10 +45,8 @@ export class ElementDatabaseService {
     this.board = [
       
     ]; 
-  
   }
     
-
   getElements(): any{
     
     this.elements = [];
@@ -67,10 +64,7 @@ export class ElementDatabaseService {
     console.log("Board: ");
     console.log(this.components)
    
-  
     });
     return this.components;
   }
-
 }
-

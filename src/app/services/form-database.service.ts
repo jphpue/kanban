@@ -5,7 +5,8 @@ import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 
-const endpoint = 'http://node.marcosraudkett.com:8083/api/';
+//const endpoint = 'http://node.marcosraudkett.com:8083/api/';
+const endpoint ='http://172.30.133.2:8083/api/';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
@@ -31,30 +32,30 @@ export class FormDatabaseService {
   }
   
   postFormAPI(formTitle): Observable<any> {
-    return this.http.post(endpoint + 'forms?title=' + formTitle,null);
+    return this.http.post(endpoint + 'templates?title=' + formTitle,null);
   }  
 
   getFormAPI(formId): Observable<any> {
-    return this.http.get(endpoint + 'forms/' + formId);
+    return this.http.get(endpoint + 'templates/' + formId);
 
   }
 
   getFormDataAPI(formId): Observable<any> {
     this.ready =true;
-    return this.http.get(endpoint + 'formData/' + formId);
+    return this.http.get(endpoint + 'templateData/' + formId);
    
   }
 
-  getFormsAPI(): Observable<any> {
-    return this.http.get(endpoint + 'forms');
+  gettemplatesAPI(): Observable<any> {
+    return this.http.get(endpoint + 'templates');
   }
 
   putFormAPI(formId, formData): Observable<any> {
-    return this.http.put(endpoint + 'formData/' + formId + "?formData=" + formData,null);
+    return this.http.put(endpoint + 'templateData/' + formId + "?templateData=" + formData,null);
   }
 
   deleteFormAPI(formId): Observable<any> {
-    return this.http.delete(endpoint + 'forms/' + formId);
+    return this.http.delete(endpoint + 'templates/' + formId);
   }
   
   constructor(private http: HttpClient) { 
@@ -79,9 +80,9 @@ export class FormDatabaseService {
       });
     }
   
-    loadForms(): Promise<any>{
+    loadtemplates(): Promise<any>{
       return new Promise(resolve=>{ 
-        this.getFormsAPI().subscribe((data:any) => {
+        this.gettemplatesAPI().subscribe((data:any) => {
           resolve(data);
         });
       });

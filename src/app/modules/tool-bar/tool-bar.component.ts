@@ -39,18 +39,13 @@ export class ToolBarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getElements();
     this.dataservice.test();
   }
   noReturnPredicate() {
     return false;
   }
 
-  getElements(): void {
-    this.dataservice.components = this.elementDataBase.getElements();
-    console.log( this.dataservice.components)
-    //console.log(this.components +" components");
-  }
+ 
 
   destroyElements(): void {
     this.dataservice.components.length = 0;

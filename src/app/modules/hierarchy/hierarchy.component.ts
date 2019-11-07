@@ -75,7 +75,7 @@ export class HierarchyComponent implements OnInit {
     this.dataservice.hierarchyItems = [];
     for(  this.dataservice.i=0;   this.dataservice.i<  this.dataservice.board.length;  this.dataservice.i++){
       this.dataservice.hierarchyItems.push(
-        {title:this.dataservice.board[this.dataservice.i]['title'],id:  this.dataservice.board[this.dataservice.i]['id'],default:  this.dataservice.board[this.dataservice.i]['default']}
+        {title:this.dataservice.board[this.dataservice.i]['title'], id:  this.dataservice.board[this.dataservice.i]['id'],default:  this.dataservice.board[this.dataservice.i]['default']}
       )
     }
   }
