@@ -10,6 +10,7 @@ import { DataService } from '../../services/data-service.service';
 import { MainViewComponent } from '../../pages/main-view/main-view.component';
 import { FormBoardComponent } from '../../modules/form-board/form-board.component';
 import { cloneDeep } from 'lodash';
+import { FormDataServiceService } from '../../services/form-data-service.service';
 
 @Component({
   selector: 'app-tool-bar',
@@ -34,24 +35,16 @@ export class ToolBarComponent implements OnInit {
 
   constructor(
     private elementDataBase: ElementDatabaseService,
-    public dataservice: DataService
+    public dataservice: DataService,
+    public formDataService:FormDataServiceService
     
   ) { }
 
   ngOnInit() {
-    this.dataservice.test();
+ 
   }
   noReturnPredicate() {
     return false;
   }
-
- 
-
-  destroyElements(): void {
-    this.dataservice.components.length = 0;
-    this.dataservice.isComponentsLoaded = false;
-  }
-  
-
 
 }

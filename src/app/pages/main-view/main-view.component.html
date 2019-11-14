@@ -1,14 +1,12 @@
 <div class="root" >
 <div class="board" cdkDropListGroup>
     <app-tool-bar></app-tool-bar>
-      <div class="locker" *ngIf="lockerVisible">
+      <div class="locker" *ngIf="dataservice.lockerVisible">
           Start by either creating a new form or opening an older one.<br>
-          <button class="button is-color-1" (click)="toggleNewFormModal()">New Form</button>&nbsp;
-          <button class="button is-info" (click)="toggleOpenFormModal()">Open Form</button>
+          <button class="button is-color-1" (click)="dataservice.toggleNewFormModal()">New Form</button>&nbsp;
+          <button class="button is-info" (click)="dataservice.toggleOpenFormModal()">Open Form</button>
       </div>
-      
-          
-      
+    
       <app-hierarchy></app-hierarchy>
       <app-properties-window></app-properties-window>
       <app-form-board></app-form-board>       
@@ -56,8 +54,8 @@
           </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-color-1" (click)="openForm()">Open Form</button>
-        <button class="button" (click)="toggleOpenFormModal()">Cancel</button>
+        <button class="button is-color-1" (click)="formDataService.openForm()">Open Form</button>
+        <button class="button" (click)="dataservice.toggleOpenFormModal()">Cancel</button>
       </footer>
     </div>
   </div>
@@ -78,7 +76,7 @@
     </div>
   </section>
   <footer class="modal-card-foot">
-    <button class="button is-color-1" (click)="formboard.createForm()">Create Form</button>
+    <button class="button is-color-1" (click)="formDataService.createForm()">Create Form</button>
     <button class="button" (click)="dataservice.toggleNewFormModal()">Cancel</button>
   </footer>
 </div>
@@ -86,66 +84,66 @@
 
 
 
-<div class="modal" [ngClass]="{ 'is-active' : isExportModalActive }">
-<div class="modal-background" (click)="toggleExportFormModal()"></div>
+<div class="modal" [ngClass]="{ 'is-active' : dataservice.isExportModalActive }">
+<div class="modal-background" (click)="dataservice.toggleExportFormModal()"></div>
 <div class="modal-card">
   <header class="modal-card-head">
     <p class="modal-card-title">Export Form</p>
-    <button class="delete" aria-label="close" (click)="toggleExportFormModal()"></button>
+    <button class="delete" aria-label="close" (click)="dataservice.toggleExportFormModal()"></button>
   </header>
   <section class="modal-card-body">
     Export format
-    <select class="form-control" [(ngModel)]="exportFormat">
+    <select class="form-control" [(ngModel)]="dataservice.exportFormat">
       <option value="json">JSON File</option>
       <option value="xml">XML Document</option>
     </select>
   </section>
   <footer class="modal-card-foot">
-    <button class="button is-color-1" (click)="exportForm()">Export Form</button>
-    <button class="button" (click)="toggleExportFormModal()">Cancel</button>
+    <button class="button is-color-1" (click)="formDataService.exportForm()">Export Form</button>
+    <button class="button" (click)="dataservice.toggleExportFormModal()">Cancel</button>
   </footer>
 </div>
 </div>
 
-<div class="modal" [ngClass]="{ 'is-active' : isSettingsModalActive }">
-<div class="modal-background" (click)="toggleSettingsModal()"></div>
+<div class="modal" [ngClass]="{ 'is-active' : dataservice.isSettingsModalActive }">
+<div class="modal-background" (click)="dataservice.toggleSettingsModal()"></div>
 <div class="modal-card">
   <header class="modal-card-head">
     <p class="modal-card-title">Settings</p>
-    <button class="delete" aria-label="close" (click)="toggleSettingsModal()"></button>
+    <button class="delete" aria-label="close" (click)="dataservice.toggleSettingsModal()"></button>
   </header>
   <section class="modal-card-body">
      <div class="form-group">
       <label for="autoSave">Autosave Settings</label>
       <div class="input-group">
-        Autosave: <input id="autoSave" type="checkbox" class="form-control checkbox-form" name="autoSave" [(ngModel)]="autoSave">
+        Autosave: <input id="autoSave" type="checkbox" class="form-control checkbox-form" name="autoSave" [(ngModel)]="dataservice.autoSave">
       </div>
       <div class="input-group">
-        <input id="autoSaveIntervalDraft" type="number" class="form-control" placeholder="How often should it save? (seconds)" name="autoSaveIntervalDraft" [(ngModel)]="autoSaveIntervalDraft" value="30">
+        <input id="autoSaveIntervalDraft" type="number" class="form-control" placeholder="How often should it save? (seconds)" name="autoSaveIntervalDraft" [(ngModel)]="dataservice.autoSaveIntervalDraft" value="30">
       </div>
     </div>
   </section>
   <footer class="modal-card-foot">
-    <button class="button is-color-1" (click)="saveSettings()">Save Settings</button>
-    <button class="button" (click)="toggleSettingsModal()">Cancel</button>
+    <button class="button is-color-1" (click)="dataservice.saveSettings()">Save Settings</button>
+    <button class="button" (click)="dataservice.toggleSettingsModal()">Cancel</button>
   </footer>
 </div>
 </div>
 
 
-<div class="modal" [ngClass]="{ 'is-active' : isDeleteFormModalActive }">
-<div class="modal-background" (click)="toggleDeleteFormModal()"></div>
+<div class="modal" [ngClass]="{ 'is-active' : dataservice.isDeleteFormModalActive }">
+<div class="modal-background" (click)="dataservice.toggleDeleteFormModal()"></div>
 <div class="modal-card">
   <header class="modal-card-head">
     <p class="modal-card-title">Delete Form <span class="modal-span">"{{workspaceTitle}}"</span></p>
-    <button class="delete" aria-label="close" (click)="toggleDeleteFormModal()"></button>
+    <button class="delete" aria-label="close" (click)="dataservice.toggleDeleteFormModal()"></button>
   </header>
   <section class="modal-card-body">
     Are you sure you wish to delete <b><i>{{workspaceTitle}}</i></b>? You won't be able to access it again.
   </section>
   <footer class="modal-card-foot">
-    <button class="button is-danger" (click)="deleteActiveForm()">Delete Form</button>
-    <button class="button" (click)="toggleDeleteFormModal()">Cancel</button>
+    <button class="button is-danger" (click)="formDataService.deleteActiveForm()">Delete Form</button>
+    <button class="button" (click)="dataservice.closeDeleteFormModal()">Cancel</button>
   </footer>
 </div>
 </div>
@@ -161,13 +159,17 @@
           <label for="formTitle">Add new elements</label>
           <div class="input-group">
             <!--<input id="formTitle" class="form-control" placeholder="Title/Customer" name="formTitle" [(ngModel)]="dataservice.formTitle">-->
-            <button id  ="add-element-button" (click)="formboard.addNewElement(dataservice.component)">+</button>
+            <button id ="add-element-button" (click)="formDataService.addNewElement(dataservice.component)">+</button>
           </div>
-          <div properties *ngFor="let item of dataservice.comboboxComponents">{{item["title"]}}</div>
+          <div id="properties" *ngFor="let item of dataservice.comboboxComponents">
+            <input id="{{item.id}}" class="form-control childElement-input" placeholder="Combobox Title" type="text" value="{{item.prompt}}">
+            <img src="../../../assets/trash.svg"  height="16px" width="16px" alt="trashcan" (click)="formDataService.deleteChildElement(item.id)">
+
+          </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-color-1" (click)="formboard.saveProperties()">Save settings</button>
+        <button class="button is-color-1" (click)="formDataService.saveElements()">Save settings</button>
         <button class="button" (click)="dataservice.toggleConfigureModal()">Cancel</button>
       </footer>
     </div>

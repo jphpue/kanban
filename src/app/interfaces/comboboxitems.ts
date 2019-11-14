@@ -4,6 +4,6 @@ export interface Comboboxitems {
  id: String,
  row: number,
  title: String,
- prompt: Prompt,
+ prompt: string,
  parent: Parent
 }

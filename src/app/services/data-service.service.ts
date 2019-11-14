@@ -4,8 +4,8 @@ import { DatePipe } from '@angular/common';
 import { FormDatabaseService } from '../services/form-database.service';
 import { CookieService } from './cookie.service';
 import { ElementDatabaseService } from './element-database.service';
-import { FormDataServiceService } from './form-data-service.service';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Template } from './../interfaces/template';
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +17,19 @@ export class DataService {
     }
   }
   
-
-  
-  board = [];
+  //board : Template[];
+  board =[];
   components: object[];
   isComponentsLoaded: boolean = false;
   component: object;
   componentTitle: string = '';
   properties: object[];
+  defaultItems: object[];
+  defaultItemID: number=1;
+  defaultExistingId :number;
+
   activeProperty: string;
-  hierarchyItems: [];
+  hierarchyItems= [];
   todo: string[];
   template = "Template";
   boardMain = "Board";
@@ -54,6 +57,8 @@ export class DataService {
   //componentsVisible: boolean = false;
 
   comboboxComponents=[];
+  groupComponents =[];
+
 
   isNewModalActive: boolean = false;
   isOpenModalActive: boolean = false;
@@ -62,35 +67,33 @@ export class DataService {
   isDeleteFormModalActive: boolean = false;
   isPropertiesModalActive: boolean = false;
   constructor(
-
     public datePipe: DatePipe,
     public elementDataBase: ElementDatabaseService,
-    ) {
+    public Cookies : CookieService,
+    public _snackBar : MatSnackBar
+   
+    ) {/*this.initializeWorkspace();*/
 }
   
-  test() {
-    console.log(this.components);
-  }
-  
+
+
   checkId(clone: any): void {
     if (this.idList.includes(clone['id'])) {
       clone['id'] = Math.floor(Math.random() * Math.floor(2000));
-
 
     }
     if (this.idList.includes(clone['id']))
       this.checkId(clone);
 
       this.idList.push(clone['id']);
-
-
   }
+
   closeNewFormModal() {
     this.isNewModalActive = false;
   }
 
   toggleDeleteFormModal() {
-    this.isDeleteFormModalActive = false;
+    this.isDeleteFormModalActive = !this.isDeleteFormModalActive;
   }
 
   closeOpenFormModal() {
@@ -115,21 +118,24 @@ export class DataService {
 
   toggleSettingsModal() {
     this.isSettingsModalActive = !this.isSettingsModalActive;
+    console.log("open settings modal")
   }
+
   togglePropertiesModal(){ 
     this.isPropertiesModalActive = !this.isPropertiesModalActive;
-    console.log(this.isPropertiesModalActive);
   }
+
   closePropertiesModal(){
     this.isPropertiesModalActive= false;
   }
+
   toggleConfigureModal(){
     this.isConfigureModalActive=!this.isConfigureModalActive
   }
+
   closeConfigureModal(){
     this.isConfigureModalActive= false;
   }
- 
   
    /**
    * called after creating or opening a form.
@@ -150,6 +156,8 @@ export class DataService {
     this.refreshHierarchy();
     //this.componentsVisible = true;
   }
+  
+
   refreshHierarchy() {
     this.hierarchyItems = [];
     for (this.i = 0; this.i < this.board.length; this.i++) {
@@ -157,16 +165,32 @@ export class DataService {
         { title : this.board[this.i]['title'], id : this.board[this.i]['id'], default : this.board[this.i]['default'] }
       )
     }
-    console.log("Hierarchy ",this.hierarchyItems);
-    
   }
   
-
- 
   getElements(): void {
     this.components = this.elementDataBase.getElements();
     console.log( this.components)
 
   }
-
+  loadSettings(): void {
+    this.autoSave = this.Cookies.getCookie("autoSave");
+    this.autoSaveInterval = this.Cookies.getCookie("autoSaveInterval");
+    this.autoSaveIntervalDraft = this.Cookies.getCookie("autoSaveInterval") / 1000;
+    console.log("ds"+this.autoSaveIntervalDraft)
+  }
+  saveSettings(): void {
+    this.Cookies.setCookie("autoSave", <any>this.autoSave, 1, "/");
+    this.Cookies.setCookie("autoSaveInterval", parseInt(this.autoSaveIntervalDraft) * 1000, 1, "/");
+    this.autoSave = this.Cookies.getCookie("autoSave");
+    this.autoSaveInterval = this.Cookies.getCookie("autoSaveInterval");
+    console.log(this.Cookies.getCookie("autoSaveInterval"));
+    console.log(this.Cookies.getCookie("autoSave"));
+    this.toggleSettingsModal();
+    this.notification("Settings saved.", "", 2000);
+  }
+  notification(message: string, action: string, duration: number): void {
+    this._snackBar.open(message, action, {
+      duration: duration,
+    });
+}
 }

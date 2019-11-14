@@ -41,7 +41,7 @@ export class FormDatabaseService {
   }
 
   getFormDataAPI(formId): Observable<any> {
-    this.ready =true;
+    //this.ready = true;
     return this.http.get(endpoint + 'templateData/' + formId);
    
   }

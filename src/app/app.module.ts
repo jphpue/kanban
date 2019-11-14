@@ -12,6 +12,9 @@ import { FormBoardComponent } from './modules/form-board/form-board.component';
 import { HierarchyComponent } from './modules/hierarchy/hierarchy.component';
 import { ToolBarComponent } from './modules/tool-bar/tool-bar.component';
 import { PropertiesWindowComponent } from './modules/properties-window/properties-window.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
  
 @NgModule({
   declarations: [
@@ -20,7 +23,7 @@ import { PropertiesWindowComponent } from './modules/properties-window/propertie
     FormBoardComponent,
     HierarchyComponent,
     ToolBarComponent,
-    PropertiesWindowComponent
+    PropertiesWindowComponent,
   ],
   imports: [
     NgbModule,
@@ -29,7 +32,9 @@ import { PropertiesWindowComponent } from './modules/properties-window/propertie
     DragDropModule,
     FormsModule,
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

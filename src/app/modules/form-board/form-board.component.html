@@ -18,9 +18,9 @@
     <div class="items-container">
         <div class="tasks-container">
                 <p *ngIf="dataservice.board.length == 0" class="board-container-text">You can add new elements to your board by dragging them from the top menu.</p>
-            <div class="task" [ngClass]="{'color-bg-1': dataservice.id === item.id }" *ngFor="let item of dataservice.board"  (click)="props.loadProperties(item.id, $event)" id="{{item.id}}" cdkDrag>
+            <div class="task" *ngFor="let item of dataservice.board" [ngClass]="{'color-bg-1': dataservice.id === item.id }" (click)="props.loadProperties(item.id, $event)" id="{{item.id}}" cdkDrag>
              
-                <div class="item-left" (click)="dataservice.toggleConfigureModal()">(0)
+                <div class="item-left"><p (click)="formDataService.openFieldData()">(0)</p>
             
                 </div>
                 
@@ -39,7 +39,7 @@
                 </ng-template>
               
                 <div class="item-right">
-                    <img src="/assets/trash.svg" height="16px" width="16px" alt="trashcan" (click)="deleteItem(item.id)">
+                    <img src="/assets/trash.svg" height="16px" width="16px" alt="trashcan" (click)="formDataService.deleteItem(item.id)">
                 </div>
         
             </div>

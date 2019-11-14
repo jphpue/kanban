@@ -12,13 +12,13 @@
                 <ul class="menu">
                     <li class="menu-item" (click)="dataservice.toggleNewFormModal()"><a class="color-1" href="#">New</a></li>
                     <li class="menu-item" (click)="dataservice.toggleOpenFormModal()"><a href="#">Open</a></li>
-                    <li class="menu-item" (click)="formDataService.saveForm()" *ngIf="workspaceTitle !== 'FlowCatalyst'"><a href="#">Save</a></li>
+                    <li class="menu-item" (click)="formDataService.saveForm()" *ngIf="dataservice.workspaceTitle !== 'FlowCatalyst'"><a href="#">Save</a></li>
                     <li class="menu-item" (click)="dataservice.toggleExportFormModal()" *ngIf="workspaceTitle !== 'FlowCatalyst'"><a href="#">Export</a></li>
                     <li class="menu-item has-submenu" *ngIf="workspaceTitle !== 'FlowCatalyst'"> Misc
                         <ul class="sub-menu">
                             <li class="sub-menu-item"><a href="#">Preview</a></li>
                             <li class="sub-menu-item" (click)="dataservice.toggleSettingsModal()"><a href="#">Settings</a></li>
-                            <li class="sub-menu-item" (click)="closeForm()"><a href="#">Close Form</a></li>
+                            <li class="sub-menu-item" (click)="formDataService.closeForm()"><a href="#">Close Form</a></li>
                             <hr>
                             <li class="sub-menu-item" (click)="dataservice.toggleDeleteFormModal()"><a class="text-danger" href="#">Delete Form</a></li>
                         </ul>

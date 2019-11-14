@@ -13,8 +13,14 @@
                 <div class="properties" *ngFor="let property of dataservice.properties">
                     <div class="input-group property-group">
                         {{property.title}}: 
-                        <input id="{{property.title}}" class="form-control property-input" type="text" placeholder="" value="{{property.value}}">
+                        <input id="{{property.title}}" class="form-control property-input" type="text" placeholder="{{property.title}}" value="{{property.value}}">
                     </div>
+                </div>
+                <div class="default" *ngFor="let defaultItem of dataservice.defaultItems">
+                    <div class="input-group property-group">
+                        {{defaultItem.prompt}}
+                    </div>
+                    
                 </div>
             </span>
             <button class="button is-color-1 btn-block btn-properties" [attr.disabled]="!dataservice.componentTitle ? !componentTitle : null"   (click)="saveProperties()">Save Properties</button>

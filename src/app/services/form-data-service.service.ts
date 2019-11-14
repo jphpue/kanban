@@ -8,6 +8,7 @@ import { FormDatabaseService } from './form-database.service';
 import { DatePipe } from '@angular/common';
 import { Comboboxitems } from '../interfaces/comboboxitems';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,23 +18,21 @@ export class FormDataServiceService {
     public Cookies: CookieService, 
     public props: PropertiesWindowComponent,
     public hierarchy: HierarchyComponent,
-    public item: ItemComponent,
-
     public datePipe: DatePipe,
-    public comboboxitems: Comboboxitems,
     public dataservice: DataService,
-    public formDataBase: FormDatabaseService
-    
-  ) {this.loadForms(); }
+    public formDataBase: FormDatabaseService,
+ 
+  ) { }
 
   
   
-  deleteItem(id:number){
+ deleteItem(id:number){
     console.log("deleting id: "+id);
     this.dataservice.board = this.dataservice.board.filter(board=>board.id!==id);
     delete this.dataservice.idList[this.dataservice.board[id]];
     this.props.refreshProperties();
     this.hierarchy.refreshHierarchy();
+    this.dataservice.defaultItems=[];
    
   }
   editItem(item: ItemComponent): void {
@@ -42,7 +41,7 @@ export class FormDataServiceService {
   }
   closeForm(): void {
     this.Cookies.deleteCookie("form_id");
-    //this.destroyWorkspace();
+    this.destroyWorkspace();
   }
 
   /* delete currently active/open form */
@@ -51,9 +50,9 @@ export class FormDataServiceService {
     this.formDataBase.deleteForm(this.dataservice.formId).then((data:any) => {
       if(data)
       {
-        //this.destroyWorkspace();
+        this.destroyWorkspace();
         this.Cookies.deleteCookie("form_id");
-        //this.closeDeleteFormModal();
+        this.dataservice.closeDeleteFormModal();
       }
     });
   }
@@ -62,7 +61,7 @@ export class FormDataServiceService {
   /* for saving forms */
   saveForm(): void {
     this.dataservice.formId = this.Cookies.getCookie("form_id");
-    this.dataservice.formData =  JSON.parse(JSON.stringify(this.dataservice.board));
+    this.dataservice.formData =  /*JSON.parse(*/JSON.stringify(this.dataservice.board/*)*/);
     if(this.dataservice.formId) {
       this.formDataBase.saveForm(this.dataservice.formId,this.dataservice.formData).then((data:any) => {
         if(data)
@@ -84,28 +83,41 @@ export class FormDataServiceService {
         this.dataservice.formData = data['data'][0]['templateData'].replace(re, '"');
         if(this.dataservice.formData !== 'empty')
         {
-          //this.dataservice.formData = this.dataservice.formData);
+          this.dataservice.formData = JSON.parse(this.dataservice.formData);
           this.dataservice.board = this.dataservice.formData;
           console.log(this.dataservice.board);
           if(this.dataservice.board.length != 0)
           { 
             this.dataservice.id = this.dataservice.board[0]['id'];
-            //this.loadProperties(this.id);
+            this.props.loadProperties(this.dataservice.id,null,null);
           } else {
-            //this.closeProperties();
+            this.props.closeProperties();
           }
         } else {
-          //this.closeProperties();
+          this.props.closeProperties();
           this.dataservice.board = [];
         }
         this.dataservice.refreshHierarchy();
       }
     });
   }
-
+  /* for loading/opening form */
+  loadForm(formId): void {
+    this.formDataBase.loadForm(formId).then((data:any) => {
+      if(data)
+      {
+        this.dataservice.formTitle = data['data']['title'];
+        this.dataservice.workspaceTitle = data['data']['title'];
+        this.Cookies.setCookie("form_id", this.dataservice.formId, 1, "/");
+        this.loadFormData(formId);
+        this.dataservice.initializeWorkspace();  
+      }
+    });
+  }  
   /* open form */
   openForm(): void {
     this.formDataBase.loadForm(this.dataservice.openFormDropdown).then((data:any) => {
+      console.log(data);
       if(data)
       {
         this.dataservice.formTitle = data['data']['title'];
@@ -119,19 +131,7 @@ export class FormDataServiceService {
     });
   }
 
-  /* for loading/opening form */
-  loadForm(formId): void {
-    this.formDataBase.loadForm(this.dataservice.formId).then((data:any) => {
-      if(data)
-      {
-        this.dataservice.formTitle = data['data']['title'];
-        this.dataservice.workspaceTitle = data['data']['title'];
-        this.Cookies.setCookie("form_id", this.dataservice.formId, 1, "/");
-        this.loadFormData(this.dataservice.formId);
-        this.dataservice.initializeWorkspace();
-      }
-    });
-  }
+
   
   /* for creating forms */
   createForm(): void {
@@ -162,10 +162,7 @@ export class FormDataServiceService {
     }
     if(this.dataservice.exportFormat == 'xml')
     {  
-      this.dyanmicDownloadByHtmlTag({
-        fileName: this.dataservice.workspaceTitle + '.xml',
-        text: JSON.stringify(this.dataservice.board)
-      });
+      
     }
   }
 
@@ -200,19 +197,133 @@ export class FormDataServiceService {
     var event = new MouseEvent("click");
     element.dispatchEvent(event);
   }
+  destroyWorkspace() {
+    this.destroyElements();
+    this.dataservice.closeDeleteFormModal();
+    this.dataservice.lockerVisible = true;
+    this.dataservice.lastSavedVisible = false;
+    this.dataservice.workspaceTitle = "FlowCatalyst";
+    this.dataservice.workspaceTitleFull = "FlowCatalyst";
+    this.loadForms();
+  }
+
+  destroyElements(): void {
+    this.dataservice.components.length = 0;
+    this.dataservice.isComponentsLoaded = false;
+  }
 
   addNewElement(component:object){
     
-    const childElement=<Comboboxitems>{
-      id: "2003",
-      row: 3,
-      prompt: component[0]["prompt"],
-      parent: component[0]["id"],
-      title: "title"
+    this.checkForExistingId();
+    if(this.dataservice.defaultExistingId.toString()=="NaN"){
+      this.dataservice.defaultItemID=1;
     }
+    else{
+      this.dataservice.defaultItemID=this.dataservice.defaultExistingId
+    }
+    this.dataservice.defaultItemID++;
+    console.log(Math.max(this.dataservice.component[0]['default']));
+    const childElement=<Comboboxitems>{
+      id: 'c'+ this.dataservice.defaultItemID.toString(),
+      row: 3,
+      prompt: "",
+      parent: component[0]["id"],
+      title: "title",
+      itemId: this.dataservice.defaultItemID
+    }
+  
     this.dataservice.comboboxComponents.push(childElement);
-    console.log(component[0]["default"]);
+ 
+    //console.log(component[0]["default"]);
+    console.log(childElement)
+    //this.loadGroup();
+    console.log(this.dataservice.component[0]['default']);
+    this.saveElements();
+  }
+  checkForExistingId(): any {
+
+    if(Math.max(this.dataservice.component[0]['default']) == 0){
+      this.dataservice.defaultExistingId=0;
+    }
+
+    else{
+      this.dataservice.defaultExistingId = Math.max(this.dataservice.component[0]['default'][0]['itemId']);
+    }
+  
+    //console.log(this.dataservice.component[0]['default'][0]['itemId']);
+    console.log(this.dataservice.defaultExistingId)
+  }
+
+  saveElements(){
+    this.dataservice.defaultItems= [];
     
+   
+    for(let obj of this.dataservice.comboboxComponents){
+      
+      if(obj['type']=='combobox'||obj['type']=='radiobutton')
+        console.log(obj['id']);
+ 
+          let value;
+          if((<HTMLInputElement> document.getElementById(obj['id'])) == null){
+            value = "PlaceHolder";
+          }
+          else{
+            value=(<HTMLInputElement> document.getElementById(obj['id'])).value
+          }
+          
+  
+          console.log(value)
+          this.dataservice.defaultItems.push(
+            { 
+              id: obj['id'],
+              row: obj['row'],
+              prompt : value,
+              parent: obj['parent'],
+              title:obj['title'],
+              itemId: this.dataservice.defaultItemID
+              }
+          )
+          this.dataservice.component[0]['default'] = this.dataservice.defaultItems;
+          
+             
+    }
+    
+    console.log(this.dataservice.component)
+    console.log(this.dataservice.defaultItems);
+    //this.loadGroup();
+  }
+
+  deleteChildElement(id:number){
+    console.log(id)
+    console.log("deleting child element id: "+id);
+    console.log(this.dataservice.component[0]['default'][id]);/*
+    delete this.dataservice.idList[this.dataservice.board[id]];
+    this.props.refreshProperties();
+    this.hierarchy.refreshHierarchy();
+    this.dataservice.defaultItems=[];*/
+   
+  }
+
+ 
+  loadGroup(){
+   
+    let i;
+    let element;
+    console.log(this.dataservice.component)
+    let length = this.dataservice.comboboxComponents.length
+    this.dataservice.comboboxComponents = []
+    for(let obj of this.dataservice.component[0]['default']){
+
+      let key : string;
+      console.log(obj)
+      this.dataservice.comboboxComponents.push(obj);
+      console.log(this.dataservice.comboboxComponents);
+    }
+  }
+
+  openFieldData(){
+    this.loadGroup();
+    this.dataservice.toggleConfigureModal();
     
   }
 }

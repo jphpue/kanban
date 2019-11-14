@@ -27,8 +27,7 @@ import { FormDataServiceService } from 'src/app/services/form-data-service.servi
   providedIn: 'root'
 })
 export class FormBoardComponent implements OnInit {
- 
-  i:number
+
   constructor(
     public toolbar: ToolBarComponent,
     public Cookies: CookieService,
@@ -47,6 +46,7 @@ export class FormBoardComponent implements OnInit {
   ngOnInit() {
     this.formDataService.loadForms();
     //this.dataservice.loadSettings();
+   
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -70,8 +70,9 @@ export class FormBoardComponent implements OnInit {
     
     }
     //this.loadProperties(id:number, item: event);
+    console.log(this.dataservice.board.length);
     this.hierarchy.refreshHierarchy();
-  
+
   }
 
   dropHierarchy(event: CdkDragDrop<string[]>) {

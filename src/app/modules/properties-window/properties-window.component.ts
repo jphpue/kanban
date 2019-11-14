@@ -1,8 +1,5 @@
 import { Component, OnInit, Input,Injectable } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { CdkDragDrop, moveItemInArray, transferArrayItem, copyArrayItem, CdkDrag } from '@angular/cdk/drag-drop';
-import { ItemComponent } from '../../interfaces/item-component';
-import { FormComponent } from '../../interfaces/form-component';
 import { DataService } from '../../services/data-service.service';
 import { ElementDatabaseService } from '../../services/element-database.service'
 import { FormDatabaseService } from '../../services/form-database.service'
@@ -51,46 +48,40 @@ export class PropertiesWindowComponent implements OnInit {
   /* saves the board item settings 
   @@TODO: check for clone id here
   */
- propertiesHandler(){
-   this.saveProperties();
-
-   //this.togglePropertiesModal();
- }
   saveProperties() {
-  
-    this.dataservice.component = this.dataservice.board.filter(
+      
+      this.dataservice.component = this.dataservice.board.filter(
       board => this.dataservice.board.id === this.id);
-     /* console.log(this.board[0]);
-      console.log(this.formBoard.board);*/
-    if(this.dataservice.component===undefined) return
+
+    //if(this.dataservice.component===undefined) return
     for (let obj of this.dataservice.component) {
       
-      let key:string;
       for (let key in obj) {
-        
+       
         if (key != '_id'
           && key != 'create_date'
           && key != 'editing'
-          && key != 'main') {
-          //console.log(key);
-          let value = (<HTMLInputElement> document.getElementById(key)).value
-         // console.log( this.dataservice.component[0][key]);
-          this.dataservice.component[0][key] = value;
-          //console.log( this.dataservice.component[0][key])
-          
+          && key != 'main'
+          && key != 'default') {
+          console.log(this.dataservice.component);
+          console.log(this.dataservice.component[0][key])
+          this.dataservice.component[0][key] = (<HTMLInputElement> document.getElementById(key)).value 
+          /*this.dataservice.component[0][key] = value;
           let pushed={ title: key, value : obj[key] };
-          this.dataservice.properties.push(pushed)
-          //console.log("saved");
+          this.dataservice.properties.push(pushed)*/
         }
-    
+        
       }
+      
       this.loadProperties(this.dataservice.component[0]["id"],null,null)
     }
-    //this.refreshHierarchy();
+    this.dataservice.refreshHierarchy();
   }
+
   loadProperties(id: number, item: CdkDragDrop<string[]>, event) {
      console.log(item);
      this.dataservice.properties = [];
+     this.dataservice.defaultItems= [];
      this.dataservice.component = this.dataservice.board.filter(
           board => board.id === id);
           this.dataservice.componentTitle = this.dataservice.component[0]['title'];
@@ -102,13 +93,33 @@ export class PropertiesWindowComponent implements OnInit {
           if(key != '_id' 
              && key != 'create_date' 
              && key != 'editing' 
-             && key != 'main')
-          {
-            this.dataservice.properties.push(
-              {title: key,value: obj[key]}
+             && key != 'main'
             )
+          {
+            if(key != 'default'){
+              this.dataservice.properties.push(
+                {title: key,value: obj[key]}
+              )
+            }
+            
+            if(key=='default'){
+              
+              console.log(obj['default']);
+              this.dataservice.defaultItems.push(
+              { prompt: obj['default']['prompt'] }
+              )
+              console.log(this.dataservice.defaultItems);
+              /*for (let key2 of key){
+                console.log(key);
+                this.dataservice.defaultItems.push(
+                  {title: key}
+                )
+              }*/
+            }
           }
+         
         }
+        console.log(this.dataservice.defaultItems);
     }
     
     console.log(this.dataservice.component);

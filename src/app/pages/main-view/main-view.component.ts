@@ -36,11 +36,19 @@ export class MainViewComponent implements OnInit {
     private datePipe: DatePipe,
     public dataservice: DataService,
     public formboard: FormBoardComponent,
-    public formDataService: FormDataServiceService
+    public formDataService: FormDataServiceService,
+    public props : PropertiesWindowComponent
   ) { }
 
   ngOnInit() {
     
+     /* if form id cookie exists then we attempt to load the form */
+     this.dataservice.formId = this.Cookies.getCookie("form_id");
+     if(this.dataservice.formId && this.dataservice.formId != '') {
+       this.formDataService.loadForm(this.dataservice.formId);
+     }
+     this.dataservice.loadSettings();
+ 
     this.dataservice.selectFormTitles = [];
    
     if (!!this.dataservice.autoSave == true) {
