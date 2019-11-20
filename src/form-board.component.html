@@ -1,0 +1,52 @@
+<!--<app-properties-window [boardComponent]="component"></app-properties-window>-->
+
+<div class="board-column-main"
+                  cdkDropList
+                  [cdkDropListData]="dataservice.board"
+                  #doneList="cdkDropList"
+                  
+                  (cdkDropListDropped)="drop($event)">
+                  
+    <div class="column-title">
+        {{boardMain}}
+        <span class="is-pulled-right board-right-items">
+        <a href="#" title="Undo changes">Undo</a>&nbsp;
+        <a href="#" title="Redo changes">Redo</a>&nbsp;
+        <a href="#" title="Edit code">< / ></a>
+        </span>
+    </div>
+    <div class="items-container">
+        <div class="tasks-container">
+                <p *ngIf="dataservice.board.length == 0" class="board-container-text">You can add new elements to your board by dragging them from the top menu.</p>
+            <div class="task" *ngFor="let item of dataservice.board" [ngClass]="{'color-bg-1': dataservice.id === item.id }" (click)="props.loadProperties(item.id, $event)" id="{{item.id}}" cdkDrag>
+             
+                <div class="item-left"><p (click)="formDataService.openFieldData()">(0)</p>
+            
+                </div>
+                
+                    <div *ngIf="!item.editing; else editingItem" class="item-label" >
+                            
+                        <div *ngIf="!item.prompt; else showTitle">{{item.title}}
+                        </div>
+                        
+                            <ng-template #showTitle>
+                                {{item.prompt}}
+                            </ng-template>
+                    </div>
+  
+                <ng-template #editingItem>
+                    <input type="text" name="item" class="item-edit" [(ngModel)]="itemPrompt" placeholder="{{item.title}} (keyup.enter)="addItem()">
+                </ng-template>
+              
+                <div class="item-right">
+                    <img src="/assets/trash.svg" height="16px" width="16px" alt="trashcan" (click)="formDataService.deleteItem(item.id)">
+                </div>
+        
+            </div>
+            <!--<app-properties-window [properties]="elementProperties"></app-properties-window>-->
+        </div>
+    </div>  
+</div>
+
+
+
